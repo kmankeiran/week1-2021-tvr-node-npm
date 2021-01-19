@@ -1,16 +1,27 @@
-const http = require('http'); // Like a PHP require
+const express = require('express'); // Like a PHP require
+const path = require('path');
 
-// require is more or less the same as a JS import
+const server = express();
 
-// const hostname = '127.0.0.1'; // this is localhost
+
+//set our views directory
+server.set("views", path.join(__dirname, 'views'));
+// set the static assets director so Express knows where to look
+// for css files, JS files, images et - anything static
+server.use(express.static(path.join(__dirname, 'public')));
+
+server.get("/", (req, res) => {
+  console.log('you have now hit the home route');
+  res.sendFile('views/index.html');
+})
+
+server.get("/contact", (req, res) => {
+  console.log('hit the contact route');
+  res.sendFile('views/contact.html');
+})
+
 const port = process.env.PORT || 3000; // localhost:3000
 
-// req - listen for requests. res - listen for responses.
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end(' day and counting until the world freaking parties cuz the orange idiot will be gone!');
-});
 
 server.listen(port, () => {
   console.log(`Server is now running at ${port}/`);
